@@ -13,18 +13,22 @@ import java.util.logging.Logger;
 @Configuration
 public class WebAppInitializer implements WebApplicationInitializer {
 
+    private static final String CONFIG_LOCATION = "com.jordy.config";
+    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
+    private static final String DISPATCHER_SERVLET_MAPPING_URL = "/";
+
     @Override
     public void onStartup(ServletContext container) {
         AnnotationConfigWebApplicationContext context
                 = new AnnotationConfigWebApplicationContext();
-        context.setConfigLocation("com.jordy.config");
+        context.setConfigLocation(CONFIG_LOCATION);
 
         container.addListener(new ContextLoaderListener(context));
 
         ServletRegistration.Dynamic dispatcher = container
-                .addServlet("dispatcher", new DispatcherServlet(context));
+                .addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(context));
 
         dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
+        dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING_URL);
     }
 }

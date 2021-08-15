@@ -1,6 +1,5 @@
 package com.jordy.config;
 
-import org.fluentd.logger.FluentLogger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,17 +14,16 @@ import static java.lang.String.format;
 @RestController
 public class TestController {
 
-    private static FluentLogger LOG = FluentLogger.getLogger("app", "remotehost", port);
-
     @ResponseBody
-    @RequestMapping(
-            value = {"/test"},
-            method = {RequestMethod.GET}
-    )
+    @RequestMapping(value = {"/test"}, method = {RequestMethod.GET})
     public String hello(HttpSession session, HttpServletResponse response) {
+
         session.setAttribute("count", getSessionAttribute(session));
         response.addCookie(new Cookie("jeusCookie", session.getId()));
-        return format("System.getProperty(\"-Dspring.profiles.active=%s     |    session.getId()=%s   |   session.getAttribute(\"count\")=%s"
+
+        return format("System.getProperty(\"-Dspring.profiles.active=%s     \n" +
+                        "session.getId()=%s   \n" +
+                        "session.getAttribute(\"count\")=%s"
                 , System.getProperty("spring.profiles.active")
                 , session.getId()
                 , session.getAttribute("count"));
@@ -36,6 +34,7 @@ public class TestController {
         try {
             result = 1 + (int) session.getAttribute("count");
         } catch (Exception e) {
+
         }
         return result;
     }
